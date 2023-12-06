@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
     const productData = await Product.findAll({
       include: [{ model: Category }, { model: Tag, through: ProductTag }],
     });
-    res.statusMessage(200).json(productData);
+    res.status(200).json(productData);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -24,6 +24,7 @@ router.get('/:id', async (req, res) => {
     const productData = await Product.findByPk(req.params.id, {
       include: [{ model: Category }, { model: Tag, through: ProductTag }],
     });
+    res.status(200).json(productData);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -78,14 +79,16 @@ router.put('/:id', (req, res) => {
           where: { product_id: req.params.id }
         }).then((productTags) => {
           // create filtered list of new tag_ids
-          const productTagIds = productTags.map(({ tag_id }) => tag_id);
-          const newProductTags = req.body.tagIds
-          .filter((tag_id) => !productTagIds.includes(tag_id))
+          // productTags = an array of all rows of ProductTag.product_id = the request id
+          const productTagIds = productTags.map(({ tag_id }) => tag_id); //deconstructs tag_id out of the array objects
+          const newProductTags = req.body.tagIds 
+          .filter((tag_id) => !productTagIds.includes(tag_id)) 
           .map((tag_id) => {
             return {
               product_id: req.params.id,
               tag_id,
             };
+            // takes tagIds from request body, filters out items from the productTag query that do not include those ids, then turns that data into an oject that contains the product_id and the tag_ids that remain
           });
 
             // figure out which ones to remove
@@ -117,14 +120,15 @@ router.delete('/:id', async (req, res) => {
       }
     });
 
-    if (!locationData) {
+    if (!productData) {
       res.status(404).json({ message: 'No location found with this id!' });
       return;
     }
 
-    res.status(200).json(locationData);
+    res.status(200).json(productData);
   } catch (err) {
     res.status(500).json(err);
+    console.log(err)
   }
 });
 
