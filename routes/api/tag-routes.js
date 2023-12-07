@@ -87,7 +87,7 @@ router.put('/:id', (req, res) => {
               product_id,
               tag_id: req.params.id,
             };
-            // takes tagIds from request body, filters out items from the productTag query that do not include those ids, then turns that data into an oject that contains the product_id and the tag_ids that remain
+            // takes tagIds from request body, filters out items from the productTag query that do not include those ids, then turns that data into an object that contains the product_id and the tag_ids that remain
           });
 
             // figure out which ones to remove
