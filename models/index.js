@@ -21,7 +21,6 @@ Product.belongsToMany(Tag, {
   through: 'product_tag',
   foreignKey: 'product_id', 
   onDelete: 'SET NULL',
-  onUpdate: 'CASCADE'
 });
 
 // Tags belongToMany Products (through ProductTag)
@@ -29,7 +28,6 @@ Tag.belongsToMany(Product, {
   through: 'product_tag',
   foreignKey: 'tag_id',
   onDelete: 'SET NULL',
-  onUpdate: 'CASCADE'
 });
 
 module.exports = {
